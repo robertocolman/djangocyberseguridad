@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block contenido %}
+<form action="{% url 'blog_auth:login'%}" method="POST">
+    {% csrf_token %}
+    <h1>Iniciar sesión</h1>
+    <label for="username"> Usuario</label>
+    <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+
+    <label for="password"> Usuario</label>
+    <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+
+    <button type="submit"> Autenticarse</button>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.error %}
+                <div class="alert alert-danger">
+                    <strong>{{ error | escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error | escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+</form>
+
+{% endblock %}

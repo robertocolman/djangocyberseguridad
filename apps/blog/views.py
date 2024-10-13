@@ -34,6 +34,10 @@ def postdetalle(request,id):
 def contacto(request):
     return render(request, 'contacto.html')
 
+def formulario(request):
+    return render(request, 'formulario.html')
+
+
 ''' def home_view(request):
     return HttpResponse("Esto es una página de prueba!")
 

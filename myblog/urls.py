@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from blog.views import *
+from apps.blog.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +24,7 @@ urlpatterns = [
     path("contacto", contacto, name='contacto'),
     path("posts", lista_posts, name='lista_posts'),
     path("posts-detalle/<int:id>/", postdetalle, name='postdetalle'),
+    path("formulario", formulario, name='formulario')
     #path('', IndexView.as_view(), name='index'),
     #path('inicio', AboutView.as_view(template_name='inicio.html')),
     #path('index', AboutView.as_view()),

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block contenido %}
+<form action="{% url 'blog_auth:registro'%}" method="POST">
+    {% csrf_token %}
+    <h1>Registro de Usuario</h1>
+    <label for="username"> Correo electrónico:</label>
+    <input type="text" name="username" id="userame" placeholder="Ingrese usuario">
+    <label for="email"> Correo electrónico:</label>
+    <input type="email" name="email" id="user-email" placeholder="Ingrese correo electrónico">
+    <label for="password1"> Contraseña:</label>
+    <input type="password" name="password1" id="password1" placeholder="Ingrese contraseña">
+    <label for="password2"> Repetir Contraseña:</label>
+    <input type="password2" name="password2" id="password2" placeholder="Ingrese nuevamente contraseña">
+
+    <button type="submit"> Registrarse</button>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.error %}
+                <div class="alert alert-danger">
+                    <strong>{{ error | escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error | escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+</form>
+
+{% endblock %}

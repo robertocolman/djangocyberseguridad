@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog'
+    'apps.blog',
+    'apps.blog_auth'
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'myblog.urls'
 
-TEMPLATES_DIR = os.path.join(os.path.dirname(BASE_DIR), 'templates')
+TEMPLATES_DIR = os.path.join(os.path.dirname(BASE_DIR), 'blog')
 
 TEMPLATES = [
     {
