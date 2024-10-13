@@ -1,0 +1,13 @@
+{% extends "base.html" %} <!-- Indica que hereda de base.html -->
+{% load static %}
+{% block contenido %}
+        <section>
+            {% for post in posts %} 
+                <article>
+                    <h3><a href="">{{post.titulo}}</a></h3>
+                    <p>Fecha publicación:{{post.fecha_publicacion}}</p>
+                    <p>Autor:{{post.autor}}</p>
+                </article>
+            {% endfor %}
+        </section>
+{% endblock %}
