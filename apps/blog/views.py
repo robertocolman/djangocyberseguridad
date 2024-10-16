@@ -5,6 +5,8 @@ from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
 from .models import Post, Comentario
+from django.contrib.auth import views as auth_views
+
 
 # Create your views here.
 def index(request):
@@ -19,6 +21,9 @@ def contacto(request):
 
 def formulario(request):
     return render(request, 'formulario.html')
+
+class Login(auth_views.LoginView):
+    template_name = "auth/login.html"
 
 def lista_posts(request):
     #posts = Post.objects.filter(fecha_publicacion=timezone.now()).order_by('fecha_publicacion')

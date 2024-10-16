@@ -1,36 +1,49 @@
 {% extends "base.html" %}
 {% block contenido %}
-<form action="{% url 'blog_auth:registro'%}" method="POST">
-    {% csrf_token %}
-    <h1>Registro de Usuario</h1>
-    <label for="username"> Correo electrónico:</label>
-    <input type="text" name="username" id="userame" placeholder="Ingrese usuario">
-    <label for="email"> Correo electrónico:</label>
-    <input type="email" name="email" id="user-email" placeholder="Ingrese correo electrónico">
-    <label for="password1"> Contraseña:</label>
-    <input type="password" name="password1" id="password1" placeholder="Ingrese contraseña">
-    <label for="password2"> Repetir Contraseña:</label>
-    <input type="password2" name="password2" id="password2" placeholder="Ingrese nuevamente contraseña">
+<div class="container mt-5">
+    <form action="{% url 'apps.blog_auth:registro' %}" method="POST">
+        {% csrf_token %}
+        <h1>Registro de Usuario</h1>
+        
+        <div class="mb-3">
+            <label for="id_username">Usuario:</label>
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Ingrese usuario">
+        </div>
 
-    <button type="submit"> Registrarse</button>
+        <div class="mb-3">
+            <label for="id_email">Correo electrónico:</label>
+            <input type="email" name="email" id="id_email" class="form-control" placeholder="Ingrese correo electrónico">
+        </div>
 
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.error %}
+        <div class="mb-3">
+            <label for="id_password1">Contraseña:</label>
+            <input type="password" name="password1" id="id_password1" class="form-control" placeholder="Ingrese contraseña">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_password2">Repetir Contraseña:</label>
+            <input type="password" name="password2" id="id_password2" class="form-control" placeholder="Reingrese contraseña">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+
+        {% if form.errors %}
+            <!-- Mostrar los errores asociados a los campos del formulario -->
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <!-- Mostrar los errores no relacionados con campos específicos -->
+            {% for error in form.non_field_errors %}
                 <div class="alert alert-danger">
-                    <strong>{{ error | escape }}</strong>
+                    <strong>{{ error }}</strong>
                 </div>
             {% endfor %}
-        {% endfor %}
-
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error | escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-
-</form>
-
+        {% endif %}
+    </form>
+</div>
 {% endblock %}

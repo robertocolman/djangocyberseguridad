@@ -15,7 +15,7 @@ class SignUpView(FormView):
     '''Vista que retorna el formulario de Registro de Usuario'''
     template_name = "auth/registro.html"
     form_class = SignUpForm
-    success_url = reverse_lazy('apps.blog_auth:login')
+    success_url = reverse_lazy('apps.blog_auth:registrocompleto')
 
     def form_valid(self, form):
         form.save()
