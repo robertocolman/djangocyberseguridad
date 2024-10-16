@@ -11,6 +11,14 @@ def index(request):
     ultimosposts=Post.objects.all().order_by('fecha_publicacion').reverse()[:3]
     return render(request, 'index.html', {'ultimosposts':ultimosposts})
 
+def index(request):
+    return render(request, 'index.html')
+
+def contacto(request):
+    return render(request, 'contacto.html')
+
+def formulario(request):
+    return render(request, 'formulario.html')
 
 def lista_posts(request):
     #posts = Post.objects.filter(fecha_publicacion=timezone.now()).order_by('fecha_publicacion')
@@ -30,12 +38,6 @@ def postdetalle(request,id):
         "comentarios": comentarios
     }
     return render(request, 'post_detalle.html', context)
-
-def contacto(request):
-    return render(request, 'contacto.html')
-
-def formulario(request):
-    return render(request, 'formulario.html')
 
 
 ''' def home_view(request):

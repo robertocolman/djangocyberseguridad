@@ -7,8 +7,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
-
-from forms import SignUpForm
+from .forms import SignUpForm
 
 
 # Create your views here.

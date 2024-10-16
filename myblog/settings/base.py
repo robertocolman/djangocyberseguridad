@@ -56,12 +56,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'myblog.urls'
 
-TEMPLATES_DIR = os.path.join(os.path.dirname(BASE_DIR), 'blog')
+TEMPLATES_BLOG = os.path.join(os.path.dirname(BASE_DIR), 'templates')
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],
+        'DIRS': [TEMPLATES_BLOG],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
