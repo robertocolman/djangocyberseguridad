@@ -2,11 +2,14 @@
 #from django.views import View
 #from django.views.generic import TemplateView
 from django.http.response import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import Post, Comentario
 from django.contrib.auth import views as auth_views
-
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from apps.blog_auth.forms import PostForm
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 def index(request):
@@ -43,6 +46,51 @@ def postdetalle(request,id):
         "comentarios": comentarios
     }
     return render(request, 'post_detalle.html', context)
+
+@login_required
+def crear_post(request):
+    if request.user.perfil.rol == 'colaborador':
+        if request.method == 'POST':
+            form = PostForm(request.POST, request.FILES)  # Maneja archivos (imágenes)
+            if form.is_valid():
+                nuevo_post = form.save(commit=False)  # Crea el post sin guardarlo
+                nuevo_post.autor = request.user  # Asigna el autor del post
+                nuevo_post.save()  # Guarda el post en la base de datos
+                return redirect('nombre_de_la_vista_de_exito')  # Redirige a una vista de éxito
+        else:
+            form = PostForm()  # Crea un formulario vacío para el GET
+
+        return render(request, 'blog/crear_post.html', {'form': form})  # Renderiza la plantilla con el formulario
+    else:
+        return HttpResponseForbidden("No tienes permisos para crear un post.")
+
+@login_required
+def editar_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    if request.user.perfil.rol == 'colaborador' or request.user == post.autor:
+        if request.method == 'POST':
+            form = PostForm(request.POST, request.FILES, instance=post)
+            if form.is_valid():
+                form.save()
+                return redirect('nombre_de_la_vista_de_exito')  # Cambia esto por la vista deseada
+        else:
+            form = PostForm(instance=post)
+        return render(request, 'blog/editar_post.html', {'form': form, 'post': post})
+    else:
+        return HttpResponseForbidden("No tienes permisos para editar este post.")
+
+@login_required
+def eliminar_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    if request.user.perfil.rol == 'colaborador' or request.user == post.autor:
+        post.delete()
+        return redirect('nombre_de_la_vista_de_exito')  # Cambia esto por la vista deseada
+    else:
+        return HttpResponseForbidden("No tienes permisos para eliminar este post.")
+
+
 
 
 ''' def home_view(request):
