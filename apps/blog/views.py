@@ -31,7 +31,13 @@ class Login(auth_views.LoginView):
 def lista_posts(request):
     #posts = Post.objects.filter(fecha_publicacion=timezone.now()).order_by('fecha_publicacion')
     posts=Post.objects.all().order_by('fecha_publicacion')
-    return render(request, 'posts.html',{'posts':posts})
+    categoria_id = request.GET.get('categoria')
+    if categoria_id:
+        posts = Post.objects.filter(categoria_id=categoria_id)
+    else:
+        posts = Post.objects.all()
+    
+    return render(request, 'posts.html', {'posts': posts})
 
 def postdetalle(request,id):
     try:
@@ -49,46 +55,37 @@ def postdetalle(request,id):
 
 @login_required
 def crear_post(request):
-    if request.user.perfil.rol == 'colaborador':
-        if request.method == 'POST':
-            form = PostForm(request.POST, request.FILES)  # Maneja archivos (imágenes)
-            if form.is_valid():
-                nuevo_post = form.save(commit=False)  # Crea el post sin guardarlo
-                nuevo_post.autor = request.user  # Asigna el autor del post
-                nuevo_post.save()  # Guarda el post en la base de datos
-                return redirect('nombre_de_la_vista_de_exito')  # Redirige a una vista de éxito
-        else:
-            form = PostForm()  # Crea un formulario vacío para el GET
-
-        return render(request, 'blog/crear_post.html', {'form': form})  # Renderiza la plantilla con el formulario
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)  # Asegúrate de incluir request.FILES para manejar imágenes
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.autor = request.user  # Asociar el post al usuario actual
+            post.save()
+            return redirect('apps.blog:lista_posts')  # Redirigir a la lista de posts
     else:
-        return HttpResponseForbidden("No tienes permisos para crear un post.")
+        form = PostForm()  # Crear una nueva instancia del formulario
+
+    return render(request, 'crear_post.html', {'form': form})
 
 @login_required
-def editar_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    
-    if request.user.perfil.rol == 'colaborador' or request.user == post.autor:
-        if request.method == 'POST':
-            form = PostForm(request.POST, request.FILES, instance=post)
-            if form.is_valid():
-                form.save()
-                return redirect('nombre_de_la_vista_de_exito')  # Cambia esto por la vista deseada
-        else:
-            form = PostForm(instance=post)
-        return render(request, 'blog/editar_post.html', {'form': form, 'post': post})
+def editar_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)  # Solo permite que el autor edite su post
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detalles', pk=post.pk)
     else:
-        return HttpResponseForbidden("No tienes permisos para editar este post.")
+        form = PostForm(instance=post)
+    return render(request, 'editar_post.html', {'form': form})
 
 @login_required
-def eliminar_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    
-    if request.user.perfil.rol == 'colaborador' or request.user == post.autor:
+def eliminar_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    if request.method == 'POST':
         post.delete()
-        return redirect('nombre_de_la_vista_de_exito')  # Cambia esto por la vista deseada
-    else:
-        return HttpResponseForbidden("No tienes permisos para eliminar este post.")
+        return redirect('posts')
+    return render(request, 'eliminar_post.html', {'post': post})
 
 
 

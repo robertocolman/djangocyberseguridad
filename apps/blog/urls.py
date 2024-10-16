@@ -10,7 +10,7 @@ urlpatterns = [
     path("formulario", formulario, name='formulario'),
     path("posts", lista_posts, name='lista_posts'),
     path("posts-detalle/<int:id>/", postdetalle, name='postdetalle'),
-    path('crear/', crear_post, name='crear_post'),
+    path('posts/crear/', crear_post, name='crear_post'),  # Asegúrate de que esta línea esté presente
     path('editar/<int:post_id>/', editar_post, name='editar_post'),
     path('eliminar/<int:post_id>/', eliminar_post, name='eliminar_post'),
 ]

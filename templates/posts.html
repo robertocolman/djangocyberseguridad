@@ -3,7 +3,7 @@
 {% block contenido %}
     <section>
         {% if user.is_authenticated %}
-            <a href="{% url 'crear_post' %}">Crear Nuevo Artículo</a>
+            <a href="{% url 'apps.blog:crear_post' %}">Crear Nuevo Artículo</a>
         {% endif %}
         
         {% for post in posts %}

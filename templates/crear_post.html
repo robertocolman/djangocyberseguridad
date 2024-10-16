@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Crear Nuevo Post</h2>
+
+<form method="post" enctype="multipart/form-data">  <!-- Método POST y soporte para archivos -->
+    {% csrf_token %}  <!-- Protección CSRF -->
+
+    {{ form.non_field_errors }}  <!-- Mostrar errores generales del formulario -->
+    
+    {% for field in form %}
+        <div>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}  <!-- Renderizar el campo -->
+            {{ field.errors }}  <!-- Mostrar errores específicos del campo -->
+        </div>
+    {% endfor %}
+
+    <button type="submit">Crear Post</button>  <!-- Botón para enviar el formulario -->
+</form>
+
+<!-- Enlace para regresar a la lista de posts -->
+<a href="{% url 'apps.blog:lista_posts' %}">Regresar a la lista de posts</a>
+
+{% endblock %}

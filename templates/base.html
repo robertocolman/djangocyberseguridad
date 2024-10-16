@@ -80,33 +80,39 @@
 </head>
 <body>
     <header>
-      <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'blog:index' %}">CyberSecurity</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'blog:index' %}">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blog:lista_posts' %}">Artículos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blog:contacto' %}">Contacto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'apps.blog_auth:registro' %}">Registro</a> <!-- Enlace de registro -->
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'apps.blog_auth:login' %}">Iniciar sesión</a> <!-- Enlace de login -->
-                    </li>
-                </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="{% url 'blog:index' %}">CyberSecurity</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                          <a class="nav-link active" href="{% url 'blog:index' %}">Inicio</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'blog:lista_posts' %}">Artículos</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'blog:contacto' %}">Contacto</a>
+                      </li>
+                      {% if user.is_authenticated %}
+                          <li>Bienvenido, {{ user.username }}!</li>
+                          <li>
+                              <form action="{% url 'blog_auth:logout' %}" method="post" style="display:inline;">
+                                  {% csrf_token %}
+                                  <button type="submit" class="btn btn-link nav-link" style="color: #cfd8dc;">Cerrar sesión</button>
+                              </form>
+                          </li>
+                      {% else %}
+                          <li><a href="{% url 'apps.blog_auth:login' %}">Iniciar sesión</a></li>
+                          <li><a href="{% url 'apps.blog_auth:registro' %}">Registrarse</a></li>
+                      {% endif %}
+                  </ul>
+              </div>
             </div>
-        </div>
-      </nav>
+          </nav>
     </header>
 
     <main>
