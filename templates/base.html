@@ -97,17 +97,25 @@
                       <li class="nav-item">
                           <a class="nav-link" href="{% url 'blog:contacto' %}">Contacto</a>
                       </li>
+                  </ul>
+                  <ul class="navbar-nav ms-auto mb-2 mb-lg-0">  <!-- Cambiar 'me-auto' a 'ms-auto' para alinear a la derecha -->
                       {% if user.is_authenticated %}
-                          <li>Bienvenido, {{ user.username }}!</li>
-                          <li>
+                          <li class="nav-item">
+                              <span class="navbar-text">Bienvenido, {{ user.username }}!</span>
+                          </li>
+                          <li class="nav-item">
                               <form action="{% url 'blog_auth:logout' %}" method="post" style="display:inline;">
                                   {% csrf_token %}
                                   <button type="submit" class="btn btn-link nav-link" style="color: #cfd8dc;">Cerrar sesión</button>
                               </form>
                           </li>
                       {% else %}
-                          <li><a href="{% url 'apps.blog_auth:login' %}">Iniciar sesión</a></li>
-                          <li><a href="{% url 'apps.blog_auth:registro' %}">Registrarse</a></li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="{% url 'apps.blog_auth:login' %}">Iniciar sesión</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="{% url 'apps.blog_auth:registro' %}">Registrarse</a>
+                          </li>
                       {% endif %}
                   </ul>
               </div>

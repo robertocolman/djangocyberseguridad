@@ -27,6 +27,7 @@ urlpatterns = [
     path('', base, name='base'),
     path('blog_auth/', include('apps.blog_auth.urls', namespace='blog_auth')),
     path('blog/', include('apps.blog.urls', namespace='blog')),
+    path('auth/', include('apps.blog_auth.urls'))
     #path('', IndexView.as_view(), name='index'),
     #path('inicio', AboutView.as_view(template_name='inicio.html')),
     #path('index', AboutView.as_view()),

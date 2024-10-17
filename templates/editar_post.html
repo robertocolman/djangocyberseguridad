@@ -2,11 +2,11 @@
 
 {% block contenido %}
 <div class="container">
-    <h2>Crear un nuevo artículo</h2>
-    <form method="post">
+    <h2>Editar artículo</h2>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}  <!-- Muestra el formulario -->
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-success">Guardar cambios</button>
     </form>
     <a href="{% url 'blog:lista_posts' %}" class="btn btn-secondary">Cancelar</a>
 </div>

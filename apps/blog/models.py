@@ -11,9 +11,9 @@ class Post(models.Model):
     resumen= models.TextField()
     contenido = models.TextField()
     imagen = models.ImageField(null=True, blank=True, upload_to='img/posts', help_text='Seleccione una imagen para mostrar')
-    fecha_creacion=models.DateTimeField(default=timezone.now())
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_publicacion = models.DateTimeField(blank=True, null=True)
-    categorias = models.ManyToManyField('Categoria', related_name='posts')
+    categoria = models.ManyToManyField('Categoria', related_name='posts')
 
     def publicar(self):
         self.fecha_publicacion = timezone.now()
@@ -24,6 +24,15 @@ class Post(models.Model):
     
     def mostrarComentarios(self):
         return self.comentarios.filter(aprobado=True)
+
+# class Comentario(models.Model):
+#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comentarios')
+#     autor = models.ForeignKey(User, on_delete=models.CASCADE)
+#     contenido = models.TextField()
+#     fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Comentario por {self.autor} en {self.post}"
 
 class Categoria(models.Model):
     nombre=models.CharField(max_length=100)

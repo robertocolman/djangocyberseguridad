@@ -1,25 +1,26 @@
 from django.contrib import admin
-from .models import Post,Categoria, Comentario
+from .models import Post, Categoria, Comentario
 from django.utils.safestring import mark_safe
 
 # Register your models here.
 class CategoriasInline(admin.StackedInline):
-    model=Post.categorias.through
-    extra=5
+    model=Post.categoria.through
+    extra=1
 
 class PostAdmin(admin.ModelAdmin):
     model=Post
     inlines=(CategoriasInline,)
     #exclude=('categorias',)
-    raw_id_fields=('categorias',)
+    raw_id_fields=('categoria',)
     list_display=('titulo','autor','imagen','categoria')
     search_fields = ('titulo', 'autor', 'fecha_creacion')
     list_per_page = 25
+    pass
 
     readonly_fields =['noticia_img']
 
-    def categoria(self,obj):
-        return "\n".join([c.nombre for c in obj.categorias.all()])
+    def categoria(self, obj):
+        return "\n".join([c.nombre for c in obj.categoria.all()])
     
     def noticia_img(self,obj):
         return mark_safe(
