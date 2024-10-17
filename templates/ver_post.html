@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block contenido %}
+<section>
+    <div class="container">
+        <h1>{{ post.titulo }}</h1>
+        <p>Publicado por: {{ post.autor }} el {{ post.fecha_publicacion }}</p>
+        <div>
+            <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" class="img-fluid">
+        </div>
+        <div>
+            <p>{{ post.contenido }}</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

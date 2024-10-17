@@ -8,7 +8,7 @@
         
         {% for post in posts %}
             <article>
-                <h3><a href="">{{ post.titulo }}</a></h3>
+                <h3><a href="{% url 'apps.blog:postdetalle' post.pk %}">{{ post.titulo }}</a></h3>
                 <p>Fecha publicación: {{ post.fecha_publicacion }}</p>
                 <p>Autor: {{ post.autor }}</p>
                 <p>{{ post.resumen }}</p>
