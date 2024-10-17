@@ -2,7 +2,8 @@ from django.urls import path
 from django.urls.conf import include
 from apps.blog.views import *
 from . import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'apps.blog'
 
@@ -20,4 +21,7 @@ urlpatterns = [
     path('posts/<int:pk>/desmarcar-favorito/', desmarcar_favorito, name='desmarcar_favorito'),
     path('favoritos/', lista_favoritos, name='lista_favoritos'),
     path('post/<int:pk>/', views.postdetalle, name='postdetalle'),
-]
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,7 +10,7 @@ class Post(models.Model):
     titulo= models.CharField(max_length=200)
     resumen= models.TextField()
     contenido = models.TextField()
-    imagen = models.ImageField(null=True, blank=True, upload_to='img/posts', help_text='Seleccione una imagen para mostrar')
+    imagen = models.ImageField(upload_to='post/', blank=True, null=True)
     fecha_creacion=models.DateTimeField(default=timezone.now())
     fecha_publicacion = models.DateTimeField(blank=True, null=True)
     categorias = models.ManyToManyField('Categoria', related_name='posts')
