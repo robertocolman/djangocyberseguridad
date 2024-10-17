@@ -13,12 +13,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 def index(request):
-    # ultimosposts=Post.objects.all().order_by('fecha_publicacion').reverse()[:3]
-    ultimosposts = Post.objects.all().order_by('-fecha_publicacion')
-    context = {
-        'ultimosposts': ultimosposts
-    }
-    return render(request, 'index.html', context)
+    ultimosposts=Post.objects.all().order_by('fecha_publicacion').reverse()[:3]
+    return render(request, 'index.html', {'ultimosposts':ultimosposts})
 
 def index(request):
     return render(request, 'index.html')
@@ -43,46 +39,18 @@ def lista_posts(request):
     
     return render(request, 'posts.html', {'posts': posts})
 
-def postdetalle(request,id):
+def postdetalle(request, pk):
     try:
-        data = Post.objects.get(id=id)
-        comentarios = Comentario.objects.filter(aprobado=True)
+        data = Post.objects.get(id=pk)  # Cambia 'id' a 'pk'
+        comentarios = Comentario.objects.filter(post=data, aprobado=True)  # Filtrar comentarios por el post
     except Post.DoesNotExist:
         raise Http404('El Post seleccionado no existe.')
-    
-    # post = get_object_or_404(Post, id=id)
-    comentarios = Comentario.objects.filter(aprobado=True) 
-
-    # if request.method == 'POST':
-    #     if request.user.is_authenticated:
-    #         form = ComentarioForm(request.POST)
-    #         if form.is_valid():
-    #             comentario = form.save(commit=False)
-    #             comentario.post = post
-    #             comentario.autor = request.user
-    #             comentario.save()
-    #             return redirect('postdetalle', id=post.id)
-    #     else:
-    #         return redirect('login')
-    # else:
-    #     form = ComentarioForm()
-    
-    context={
-        "post": data,
-        "comentarios": comentarios,
-        # 'form': form,
-    }
-    return render(request, 'post_detalle.html', context)
-
-
 
     context = {
-        'post': post,
-        'comentarios': comentarios,
-        'form': form,
+        "post": data,
+        "comentarios": comentarios
     }
-    
-    return render(request, 'post_detalles.html', context)
+    return render(request, 'post_detalle.html', context)
 
 @login_required
 def crear_post(request):
@@ -92,7 +60,7 @@ def crear_post(request):
             post = form.save(commit=False)
             post.autor = request.user  # Asociar el post al usuario actual
             post.save()
-            return redirect('apps.blog:index')  # Redirigir a la lista de posts
+            return redirect('apps.blog:lista_posts')  # Redirigir a la lista de posts
     else:
         form = PostForm()  # Crear una nueva instancia del formulario
 
@@ -105,7 +73,7 @@ def editar_post(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('blog:postdetalle', id=post.pk)  # Corrige el nombre de la vista si es necesario
+            return redirect('apps.blog:postdetalle', pk=post.pk)  # Cambia 'id' por 'pk'
     else:
         form = PostForm(instance=post)
     return render(request, 'editar_post.html', {'form': form})
@@ -117,4 +85,23 @@ def eliminar_post(request, pk):
         post.delete()
         return redirect('blog:lista_posts')
     return render(request, 'eliminar_post.html', {'post': post})
+
+
+
+
+''' def home_view(request):
+    return HttpResponse("Esto es una página de prueba!")
+
+def index(request):
+    return render(request, 'inicio.html')
+
+class IndexView(View):
+    def get(self, request):
+        return HttpResponse("Esta es la página principal")
+
+class AboutView(TemplateView):
+    #pass
+    template_name = 'inicio.html'
+'''
+
 

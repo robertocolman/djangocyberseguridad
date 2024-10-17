@@ -1,34 +1,30 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- Indica que hereda de base.html -->
 {% load static %}
-
 {% block contenido %}
+
+<section>
+    <h1>{{post.titulo}}</h1>
+    {% if post.fecha_publicacion %}
+        <div>
+            {{post.fecha_publicacion}}
+        </div>
+    {% else %}
+        <a href="#">Publicar artículo</a>
+    {% endif %}
+
+    <p>
+        {{post.contenido}}
+    </p>
+    <hr>
     <div class="container">
-        <h1>{{ post.titulo }}</h1>
-        <p>{{ post.contenido }}</p>
-        <hr>
-
-        <h4>Comentarios</h4>
-        {% if comentarios %}
-            {% for comentario in comentarios %}
-                <div class="mb-3">
-                    <p><strong>{{ comentario.autor }}</strong> - {{ comentario.fecha_creacion|date:"d M Y H:i" }}</p>
-                    <p>{{ comentario.contenido }}</p>
-                </div>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>No hay comentarios aún. Sé el primero en comentar!</p>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-            <h4>Agregar un comentario</h4>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Enviar comentario</button>
-            </form>
-        {% else %}
-            <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para comentar.</p>
-        {% endif %}
+        {% for comentario in post.comentarios.all %}
+            <p>{{comentario.texto}}</p>
+            <p>Autor: {{comentario.autor}}</p>
+        {% empty %}
+        <p>No hay comentarios en este artículo</p>
+        {% endfor %}
     </div>
-{% endblock %}
+
+</section>
+
+{% endblock%}
