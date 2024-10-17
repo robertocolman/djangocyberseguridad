@@ -16,6 +16,10 @@ def index(request):
     ultimosposts=Post.objects.all().order_by('fecha_publicacion').reverse()[:3]
     return render(request, 'index.html', {'ultimosposts':ultimosposts})
 
+def base_view(request):
+    favoritos = request.user.favoritos.all() if request.user.is_authenticated else []
+    return render(request, 'base.html', {'favoritos': favoritos})
+
 def index(request):
     return render(request, 'index.html')
 
@@ -41,13 +45,14 @@ def lista_posts(request):
 
 def postdetalle(request, pk):
     try:
-        data = Post.objects.get(id=pk)  # Cambia 'id' a 'pk'
+        data = Post.objects.get(id=pk)
+        post = get_object_or_404(Post, pk=pk)  # Cambia 'id' a 'pk'
         comentarios = Comentario.objects.filter(post=data, aprobado=True)  # Filtrar comentarios por el post
     except Post.DoesNotExist:
         raise Http404('El Post seleccionado no existe.')
 
     context = {
-        "post": data,
+        "post": post,
         "comentarios": comentarios
     }
     return render(request, 'post_detalle.html', context)
@@ -85,6 +90,23 @@ def eliminar_post(request, pk):
         post.delete()
         return redirect('blog:lista_posts')
     return render(request, 'eliminar_post.html', {'post': post})
+
+@login_required
+def marcar_favorito(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.favoritos.add(request.user)
+    return redirect('apps.blog:postdetalle', pk=pk)
+
+@login_required
+def desmarcar_favorito(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.favoritos.remove(request.user)
+    return redirect('apps.blog:postdetalle', pk=pk)
+
+@login_required
+def lista_favoritos(request):
+    favoritos = request.user.favoritos.all()  # Obtiene los posts favoritos del usuario
+    return render(request, 'lista_favoritos.html', {'favoritos': favoritos})
 
 
 

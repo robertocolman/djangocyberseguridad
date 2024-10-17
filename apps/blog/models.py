@@ -14,6 +14,7 @@ class Post(models.Model):
     fecha_creacion=models.DateTimeField(default=timezone.now())
     fecha_publicacion = models.DateTimeField(blank=True, null=True)
     categorias = models.ManyToManyField('Categoria', related_name='posts')
+    favoritos = models.ManyToManyField(User, related_name='favoritos', blank=True)
 
     def publicar(self):
         self.fecha_publicacion = timezone.now()

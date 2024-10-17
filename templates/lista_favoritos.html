@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h1>Publicaciones Favoritas</h1>
+<ul>
+    {% for favorito in favoritos %}
+        <li><a href="{% url 'apps.blog:postdetalle' favorito.pk %}">{{ favorito.titulo }}</a></li>
+    {% empty %}
+        <li>No has marcado ninguna publicación como favorita.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

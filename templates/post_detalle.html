@@ -1,30 +1,24 @@
-{% extends "base.html" %} <!-- Indica que hereda de base.html -->
+{% extends "base.html" %}
 {% load static %}
 {% block contenido %}
 
 <section>
-    <h1>{{post.titulo}}</h1>
-    {% if post.fecha_publicacion %}
-        <div>
-            {{post.fecha_publicacion}}
-        </div>
-    {% else %}
-        <a href="#">Publicar artículo</a>
+    <h1>{{ post.titulo }}</h1>
+    <!-- Código existente para mostrar el post -->
+
+    {% if user.is_authenticated %}
+        {% if user in post.favoritos.all %}
+            <form action="{% url 'apps.blog:desmarcar_favorito' post.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Desmarcar como favorito</button>
+            </form>
+        {% else %}
+            <form action="{% url 'apps.blog:marcar_favorito' post.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Marcar como favorito</button>
+            </form>
+        {% endif %}
     {% endif %}
-
-    <p>
-        {{post.contenido}}
-    </p>
-    <hr>
-    <div class="container">
-        {% for comentario in post.comentarios.all %}
-            <p>{{comentario.texto}}</p>
-            <p>Autor: {{comentario.autor}}</p>
-        {% empty %}
-        <p>No hay comentarios en este artículo</p>
-        {% endfor %}
-    </div>
-
 </section>
 
-{% endblock%}
+{% endblock %}

@@ -14,4 +14,7 @@ urlpatterns = [
     path('editar/<int:pk>/', editar_post, name='editar_post'),  # Usamos pk aquí
     path('eliminar/<int:pk>/', eliminar_post, name='eliminar_post'),
     path('posts/<int:pk>/', postdetalle, name='postdetalle'),
+    path('posts/<int:pk>/marcar-favorito/', marcar_favorito, name='marcar_favorito'),
+    path('posts/<int:pk>/desmarcar-favorito/', desmarcar_favorito, name='desmarcar_favorito'),
+    path('favoritos/', lista_favoritos, name='lista_favoritos'),
 ]
