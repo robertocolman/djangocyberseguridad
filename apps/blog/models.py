@@ -33,14 +33,15 @@ class Categoria(models.Model):
         return self.nombre
 
 class Comentario(models.Model):
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comentarios')
-    autor_comentario = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    autor_comentario = models.ForeignKey(User, on_delete=models.CASCADE)
     cuerpo_comentario = models.TextField()
-    aprobado = models.BooleanField(default=False)
+    creado = models.DateTimeField(auto_now_add=True)
+    aprobado = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(default=timezone.now)  # Fecha de creación del comentario
 
     def __str__(self):
         return f'Comentario por {self.autor_comentario} en {self.post}'
 
     class Meta:
-        ordering = ['-fecha_creacion']
+        ordering = ['-creado']
