@@ -1,32 +1,22 @@
-
+#from django.http import HttpResponse
+#from django.views import View
+#from django.views.generic import TemplateView
 from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .models import Post, Comentario, Categoria
+from .models import Post, Comentario
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from apps.blog_auth.forms import PostForm
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.blog_auth.forms import ComentarioForm
-from django.views.generic import DetailView
 
 
 # Create your views here.
 def index(request):
-    # Obtiene los últimos 3 posts, ordenados por fecha de publicación (más recientes primero)
-    ultimosposts = Post.objects.all().order_by('fecha_publicacion').reverse()[:3]
-    
-    # Obtiene todas las categorías
-    categorias = Categoria.objects.all()
-    
-    # Pasa los posts y categorías al contexto
-    context = {
-        'ultimosposts': ultimosposts,
-        'categorias': categorias,
-    }
-    
-    return render(request, 'index.html', context)
+    ultimosposts=Post.objects.all().order_by('fecha_publicacion').reverse()[:3]
+    return render(request, 'index.html', {'ultimosposts':ultimosposts})
 
 def base_view(request):
     favoritos = request.user.favoritos.all() if request.user.is_authenticated else []
@@ -150,28 +140,6 @@ def eliminar_comentario(request, comentario_id):
     return redirect('apps.blog:postdetalle', pk=comentario.post.id)
 
 
-def categoria_posts(request, categoria_id):
-    categoria = get_object_or_404(Categoria, id=categoria_id)
-    posts = Post.objects.filter(categorias=categoria)  # Filtra los posts por la categoría seleccionada
-    categorias = Categoria.objects.all()  # Obtener todas las categorías para mostrar en la plantilla
-
-    context = {
-        'categoria': categoria,
-        'posts': posts,
-        'categorias': categorias,  # Agregar las categorías al contexto
-    }
-    return render(request, 'posts.html', context)
-
-def posts(request):
-    posts = Post.objects.all()  # Obtener todos los posts
-    categorias = Categoria.objects.all()  # Obtener todas las categorías
-    return render(request, 'posts.html', {'posts': posts, 'categorias': categorias})
-
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'post_detalles.html'  # Asegúrate de que esta plantilla exista
-    context_object_name = 'post'
-
 
 
 ''' def home_view(request):
@@ -188,5 +156,4 @@ class AboutView(TemplateView):
     #pass
     template_name = 'inicio.html'
 '''
-
 

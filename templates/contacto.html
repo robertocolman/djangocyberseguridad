@@ -1,13 +1,61 @@
 {% extends "base.html" %} <!-- Indica que hereda de base.html -->
 {% load static %}
 {% block contenido %}
-<section>
-    <h1> Esta es la página de contacto</h1>
-    <h1> Esta es la página de contacto</h1>
-    <h1> Esta es la página de contacto</h1>
-    <h1> Esta es la página de contacto</h1>
-    <h1> Esta es la página de contacto</h1>
-    <h1> Esta es la página de contacto</h1>
-</section>
+    <section>
+
+        <div style="justify-content: center" class="row py-4">
+			
+            <!--contactos-->
+            <div class="col-lg-3 col-md-6 mb-5">
+                
+                <div class="mb-2">
+                    <h4 class="m-0 font-weight-bold">CONTÁCTANOS</h4>
+                </div>
+
+                <div class="d-flex align-items-center mb-2" style="gap: 5px;">
+                    <i class="fa fa-map-marker-alt text-primary mr-2"></i>
+                    <h6 class="font-weight-bold mb-0">Ubicación</h6>
+                </div>
+				<p class="font-weight-medium">M. T. Alvear 145, Resistencia, Chaco.</p>
+
+                <div class="d-flex align-items-center mb-2"style="gap: 5px;">
+                    <i class="fa fa-phone-alt text-primary mr-2"></i>
+                    <h6 class="font-weight-bold mb-0">Teléfono</h6>
+                </div>
+                <a href="https://wa.me/5493624256904" target="_blank">
+                    <p class="font-weight-medium">3624256904</p>
+                </a>			
+
+                <div class="d-flex align-items-center mb-2" style="gap: 5px;">
+                    <i class="fa fa-envelope-open text-primary mr-2"></i>
+                    <h6 class="font-weight-bold mb-0">Correo eléctronico</h6>
+                </div>
+                <a href="mailto:informatorio@gmail.com" target="_blank">
+                    <p class="font-weight-medium">informatorio@gmail.com </p>
+                </a>
+				     
+                <div class="mb-2">
+                    <h6 class="font-weight-bold mb-0">Redes sociales</h6>
+                </div>
+                <div class="d-flex justify-content-start" style="gap: 15px;">
+					<a class="btn btn-lg btn-secondary" href="https://www.facebook.com/"target="_blank">
+                        <i class="fab fa-facebook"></i></a>
+                    <a class="btn btn-lg btn-secondary" href="https://www.instagram.com/"target="_blank">
+                        <i class="fab fa-instagram"></i></a>
+                    <a class="btn btn-lg btn-secondary" href="https://www.linkedin.com/"target="_blank">
+                        <i class="fab fa-linkedin"></i></a>
+                    <a class="btn btn-lg btn-secondary" href="https://www.github.com/"target="_blank">
+                        <i class="fab fa-github"></i></a>
+			    </div>
+            </div>
+			
+            <!--Algo mass-->
+            <div class="col-lg-3 col-md-6 mb-5">
+				<h4 class="m-0 text-uppercase font-weight-bold">Espacio</h4>
+		    </div>
+
+        </div>
+	
+    </section>
 
 {% endblock %}
