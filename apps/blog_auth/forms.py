@@ -22,3 +22,6 @@ class ComentarioForm(forms.ModelForm):
     class Meta:
         model = Comentario
         fields = ['cuerpo_comentario']
+        widgets = {
+            'cuerpo_comentario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

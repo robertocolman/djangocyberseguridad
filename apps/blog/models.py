@@ -11,7 +11,7 @@ class Post(models.Model):
     resumen= models.TextField()
     contenido = models.TextField()
     imagen = models.ImageField(upload_to='post/', blank=True, null=True)
-    fecha_creacion=models.DateTimeField(default=timezone.now())
+    fecha_creacion = models.DateTimeField(default=timezone.now)
     fecha_publicacion = models.DateTimeField(blank=True, null=True)
     categorias = models.ManyToManyField('Categoria', related_name='posts')
     favoritos = models.ManyToManyField(User, related_name='favoritos', blank=True)
@@ -33,12 +33,14 @@ class Categoria(models.Model):
         return self.nombre
 
 class Comentario(models.Model):
-    post = models.ForeignKey('Post', related_name='comentarios', on_delete=models.CASCADE)
-    autor_comentario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comentarios')
+    autor_comentario = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     cuerpo_comentario = models.TextField()
-    fch_creado = models.DateTimeField(default=timezone.now())
-    aprobado = models.BooleanField(default=False) 
+    aprobado = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(default=timezone.now)  # Fecha de creación del comentario
 
-    def aprobarComentario(self):
-        self.aprobado=True
-        self.save()
+    def __str__(self):
+        return f'Comentario por {self.autor_comentario} en {self.post}'
+
+    class Meta:
+        ordering = ['-fecha_creacion']

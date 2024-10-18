@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from apps.blog_auth.forms import PostForm
 from django.shortcuts import render, redirect, get_object_or_404
+from apps.blog_auth.forms import ComentarioForm
+
 
 # Create your views here.
 def index(request):
@@ -44,17 +46,28 @@ def lista_posts(request):
     return render(request, 'posts.html', {'posts': posts})
 
 def postdetalle(request, pk):
-    try:
-        data = Post.objects.get(id=pk)
-        post = get_object_or_404(Post, pk=pk)  # Cambia 'id' a 'pk'
-        comentarios = Comentario.objects.filter(post=data, aprobado=True)  # Filtrar comentarios por el post
-    except Post.DoesNotExist:
-        raise Http404('El Post seleccionado no existe.')
+    post = get_object_or_404(Post, pk=pk)  # Obtener el post por su ID
+    comentarios = Comentario.objects.filter(post=post, aprobado=True)  # Filtrar comentarios por el post
 
+    # Procesar el formulario de comentarios si se envía a través de POST
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.post = post  # Asignar el post al comentario
+            comentario.autor_comentario = request.user  # Asignar el usuario que hizo el comentario
+            comentario.save()
+            return redirect('apps.blog:postdetalle', pk=pk)  # Redirigir a la misma página para ver el comentario publicado
+    else:
+        form = ComentarioForm()
+
+    # Agregar el formulario y los comentarios al contexto
     context = {
         "post": post,
-        "comentarios": comentarios
+        "comentarios": comentarios,
+        "form": form,  # Pasar el formulario al contexto
     }
+
     return render(request, 'post_detalle.html', context)
 
 @login_required
@@ -107,6 +120,15 @@ def desmarcar_favorito(request, pk):
 def lista_favoritos(request):
     favoritos = request.user.favoritos.all()  # Obtiene los posts favoritos del usuario
     return render(request, 'lista_favoritos.html', {'favoritos': favoritos})
+
+def eliminar_comentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+
+    # Verificar que el usuario sea el autor del comentario
+    if request.user == comentario.autor_comentario:
+        comentario.delete()  # Eliminar el comentario
+
+    return redirect('apps.blog:postdetalle', pk=comentario.post.id)
 
 
 

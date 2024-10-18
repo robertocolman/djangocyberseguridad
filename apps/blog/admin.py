@@ -36,10 +36,9 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class ComentariosAdmin(admin.ModelAdmin):
-    list_display=('autor_comentario', 'cuerpo_comentario','post','fch_creado', 'aprobado')
-    list_filter=('aprobado','fch_creado')
-    search_fields = ('autor_comentario', 'cuerpo_comentario')
-    actions=['aprobar_comentarios']
+    list_display = ('autor_comentario', 'cuerpo_comentario', 'aprobado', 'fecha_creacion')  # Cambia a 'fecha_creacion'
+    list_filter = ('aprobado', 'fecha_creacion')  # Cambia a 'fecha_creacion'
+    search_fields = ('autor_comentario__username', 'cuerpo_comentario')
 
     def aprobar_comentarios(self, request,queryset):
         queryset.update(aprobado=True)
