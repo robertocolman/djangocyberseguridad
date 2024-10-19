@@ -16,15 +16,6 @@
             <p>{{ post.contenido }}</p>
         </div>
 
-
-        {% if user.is_authenticated %}
-            {% if user in post.favoritos.all %}
-                <a href="{% url 'apps.blog:desmarcar_favorito' post.pk %}" class="btn btn-warning">Quitar de favoritos</a>
-            {% else %}
-                <a href="{% url 'apps.blog:marcar_favorito' post.pk %}" class="btn btn-primary">Agregar a favoritos</a>
-            {% endif %}
-        {% endif %}
-
         <!-- Mostrar comentarios--> 
         <h3>Comentarios</h3>
         {% for comentario in comentarios %}
@@ -32,12 +23,6 @@
                 <strong>{{ comentario.autor_comentario.username }}</strong> 
                 <span>{{ comentario.fecha_creacion|timesince }}</span>
                 <p>{{ comentario.cuerpo_comentario }}</p>
-                {% if user.is_authenticated and request.user == comentario.autor_comentario %}
-                    <form action="{% url 'apps.blog:borrar_comentario' comentario.id %}" method="POST" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Eliminar Comentario</button>
-                    </form>
-                {% endif %}
             </div>
         {% empty %}
             <p>No hay comentarios aún.</p>

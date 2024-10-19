@@ -25,10 +25,6 @@ urlpatterns = [
     path('post/<int:id>/', PostDetailView.as_view(), name='postdetalle'),
     path('posts/<int:pk>/', postdetalle, name='postdetalle'),
     path('categoria/<int:categoria_id>/', categoria_posts, name='categoria_posts'),
-    path('toggle-favorite/<int:post_id>/', views.toggle_favorite, name='toggle_favorite'),
-    path('comentarios/borrar/<int:comentario_id>/', views.borrar_comentario, name='borrar_comentario'),
-    path('comentario/eliminar/<int:comentario_id>/', eliminar_comentario, name='eliminar_comentario'),
-    path('posts/<int:pk>/', postdetalle, name='post_detalle'),
 ]  
 
 if settings.DEBUG:

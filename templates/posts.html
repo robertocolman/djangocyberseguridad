@@ -4,55 +4,37 @@
 <section>
     <div class="container">
 
-        <!-- Botón para crear un nuevo artículo (centrado) -->
-        <div class="text-center my-4">
-            {% if user.is_authenticated %}
+        {% if user.is_authenticated %}
                 <a href="{% url 'apps.blog:crear_post' %}" class="btn btn-success btn-lg">Crear Nuevo Artículo</a>
             {% else %}
                 <a href="{% url 'apps.blog_auth:registro' %}" class="btn btn-success btn-lg">Regístrate para crear un artículo</a>
-            {% endif %}
+        {% endif %}
+        
+        <h1>Artículos</h1>
+
+        
+
+        <!-- Mostrar todas las categorías -->
+        <h3>Estas son las categorías:</h3>
+        <div class="row" style="gap: 15px;"> <!--se supone mostrará uno al lado de otro, con un espacio de 15px-->
+            <ul>
+                {% for categoria in categorias %}
+                    <li>
+                        <a href="{% url 'apps.blog:categoria_posts' categoria.id %}">{{ categoria.nombre }}</a>
+                    </li>   
+                {% endfor %}
+            </ul>
         </div>
 
-        <!-- Mostrar categorías -->
-        <h2 class="text-center my-5">Estas son las categorías:</h2>
-        <div class="d-flex justify-content-center flex-wrap">
-            {% for categoria in categorias %}
-                <div class="p-3 m-2 border rounded" style="min-width: 150px; text-align: center;">
-                    <a href="{% url 'apps.blog:categoria_posts' categoria.id %}" class="text-decoration-none">
-                        <strong>{{ categoria.nombre }}</strong>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-
-        <!-- Mostrar posts -->
-        <h3 class="my-5">Posts en la categoría: {{ categoria.nombre }}</h3>
+        <!-- Mostrar los posts -->
+        <h3>Posts en la categoría: {{ categoria.nombre }}</h3>
         <div class="row">
             {% for post in posts %}
                 <div class="col-md-4">
-                    <div class="post mb-4 p-3 border rounded">
-                        <!-- Mostrar imagen del post -->
-                        {% if post.imagen %}
-                            <img src="{{ post.imagen.url }}" class="img-fluid mb-3" alt="{{ post.titulo }}">
-                        {% endif %}
-                        
-                        <!-- Título del post -->
+                    <div class="post">
                         <h4><a href="{% url 'blog:postdetalle' post.id %}">{{ post.titulo }}</a></h4>
-                        
-                        <!-- Resumen del post -->
-                        <p>{{ post.resumen|truncatewords:20 }}</p>
-                        
-                        <!-- Categoría del post -->
-                        <p><strong>Categoría:</strong> {{ post.categorias.all|join:", " }}</p>
-                        
-                        <!-- Botón para agregar a favoritos -->
-                        {% if user.is_authenticated %}
-                            {% if user in post.favoritos.all %}
-                                <a href="{% url 'apps.blog:desmarcar_favorito' post.pk %}" class="btn btn-success">Quitar de favoritos</a>
-                            {% else %}
-                                <a href="{% url 'apps.blog:marcar_favorito' post.pk %}" class="btn btn-success">Agregar a favoritos</a>
-                            {% endif %}
-                        {% endif %}
+                        <p>{{ post.contenido|truncatewords:20 }}</p>
+                        <p><small>Publicado el {{ post.fecha_publicacion }}</small></p>
                     </div>
                 </div>
             {% empty %}

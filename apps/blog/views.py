@@ -4,13 +4,11 @@ from django.utils import timezone
 from .models import Post, Comentario, Categoria
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden
 from apps.blog_auth.forms import PostForm
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.blog_auth.forms import ComentarioForm
 from django.views.generic import DetailView
-from .forms import CrearPostForm
-from django.views import View
 
 
 # Create your views here.
@@ -166,7 +164,7 @@ def categoria_posts(request, categoria_id):
         'posts': posts,
         'categorias': categorias,  # Agregar las categorías al contexto
     }
-    return render(request, 'blog/posts.html', context)
+    return render(request, 'posts.html', context)
 
 def posts(request):
     posts = Post.objects.all()  # Obtener todos los posts
@@ -177,42 +175,3 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detalles.html'  # Asegúrate de que esta plantilla exista
     context_object_name = 'post'
-
-@login_required
-def toggle_favorite(request, post_id):
-    post = Post.objects.get(id=post_id)
-    
-    if request.user.perfil.favoritos.filter(id=post_id).exists():
-        # Si ya es favorito, lo removemos
-        request.user.perfil.favoritos.remove(post)
-        is_favorite = False
-    else:
-        # Si no es favorito, lo agregamos
-        request.user.perfil.favoritos.add(post)
-        is_favorite = True
-
-    return JsonResponse({'is_favorite': is_favorite})
-
-def borrar_comentario(request, comentario_id):
-    comentario = get_object_or_404(Comentario, id=comentario_id)
-    post_id = comentario.post.id  # Obtén el ID del post al que pertenece el comentario
-    if request.method == 'POST':
-        if request.user == comentario.autor_comentario:
-            comentario.delete()
-            return redirect('apps.blog:post_detalle', pk=post_id)  # Redirige al detalle del post
-    return redirect('apps.blog:post_detalle', pk=post_id)
-
-class CrearPostView(View):
-    def get(self, request):
-        form = CrearPostForm()
-        return render(request, 'blog/crear_post.html', {'form': form})
-
-    def post(self, request):
-        form = CrearPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.autor = request.user  # Asigna el autor del post
-            post.save()  # Guarda el post primero para que se pueda asociar con las categorías
-            form.save_m2m()  # Guarda las relaciones de categorías (ManyToMany)
-            return redirect('apps.blog:posts')  # Redirige después de crear el post
-        return render(request, 'blog/crear_post.html', {'form': form})

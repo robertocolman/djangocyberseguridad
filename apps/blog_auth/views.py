@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
-from .forms import *
+from .forms import SignUpForm
 from .models import Perfil
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
@@ -32,9 +32,29 @@ class CustomLoginView(LoginView):
     success_url = reverse_lazy('index')
 
 
+'''def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("apps.blog_auth:login")
+        else:
+            messages.error(request, "Credenciales incorrectas")
+    return render(render, "auth/login.html")'''
+
 class LogoutView(LoginRequiredMixin, auth_views.LogoutView):
     template_name = "auth/logout.html"
     next_page = reverse_lazy('blog:index')
+
+# class Logout(LoginRequiredMixin,auth_views.LogoutView):
+#     ''' Vista de Cierre sesión de Usuario '''
+#     template_name = "auth/logout.html"
+
+# def LogoutView(request):
+#     logout(request)
+#     return redirect('apps.blog:index')
 
 
     
