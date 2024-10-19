@@ -128,16 +128,18 @@ def eliminar_post(request, pk):
     return render(request, 'eliminar_post.html', {'post': post})
 
 @login_required
-def marcar_favorito(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.favoritos.add(request.user)
-    return redirect('apps.blog:postdetalle', pk=pk)
+def marcar_favorito(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.user.is_authenticated:
+        post.favoritos.add(request.user)
+    return redirect('apps.blog:posts')
 
 @login_required
-def desmarcar_favorito(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.favoritos.remove(request.user)
-    return redirect('apps.blog:postdetalle', pk=pk)
+def desmarcar_favorito(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.user.is_authenticated:
+        post.favoritos.remove(request.user)
+    return redirect('apps.blog:posts') 
 
 @login_required
 def lista_favoritos(request):

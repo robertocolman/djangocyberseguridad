@@ -1,12 +1,24 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 {% block contenido %}
-<h1>Publicaciones Favoritas</h1>
-<ul>
-    {% for favorito in favoritos %}
-        <li><a href="{% url 'apps.blog:postdetalle' favorito.pk %}">{{ favorito.titulo }}</a></li>
-    {% empty %}
-        <li>No has marcado ninguna publicación como favorita.</li>
-    {% endfor %}
-</ul>
+<section>
+    <div class="container">
+        <h1>Posts Favoritos</h1>
+
+        <div class="row">
+            {% for post in user.favoritos.all %}
+                <div class="col-md-4">
+                    <div class="post">
+                        <h4><a href="{% url 'blog:postdetalle' post.id %}">{{ post.titulo }}</a></h4>
+                        <p>{{ post.contenido|truncatewords:20 }}</p>
+                        <p><small>Publicado el {{ post.fecha_publicacion }}</small></p>
+                        <a href="{% url 'apps.blog:desmarcar_favorito' post.pk %}" class="btn btn-warning">Quitar de favoritos</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No tienes posts favoritos.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}
