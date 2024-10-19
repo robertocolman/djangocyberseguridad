@@ -28,6 +28,7 @@ urlpatterns = [
     path('post/<int:id>/', PostDetailView.as_view(), name='postdetalle'),
     path('posts/<int:pk>/', postdetalle, name='postdetalle'),
     path('categoria/<int:categoria_id>/', categoria_posts, name='categoria_posts'),
+    
 ]  
 
 if settings.DEBUG:

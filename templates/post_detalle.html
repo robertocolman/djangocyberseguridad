@@ -23,6 +23,14 @@
                 <strong>{{ comentario.autor_comentario.username }}</strong> 
                 <span>{{ comentario.fecha_creacion|timesince }}</span>
                 <p>{{ comentario.cuerpo_comentario }}</p>
+
+                {% if user.is_authenticated and user == comentario.autor_comentario %}
+                    <form action="{% url 'apps.blog:eliminar_comentario' comentario.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                {% endif %}
+
             </div>
         {% empty %}
             <p>No hay comentarios aún.</p>
