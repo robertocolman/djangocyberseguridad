@@ -24,7 +24,7 @@ from myblog.views import base
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', base, name='base'),
+    path("", index, name='index'),
     path('blog_auth/', include('apps.blog_auth.urls', namespace='blog_auth')),
     path('blog/', include('apps.blog.urls', namespace='blog')),
     #path('', IndexView.as_view(), name='index'),
@@ -34,4 +34,4 @@ urlpatterns = [
     #path("index", home_view, name='home_view'),
     #path('blog/', include('blog.urls')),
     #path('auth/', include('auth.urls'))
-]
+] 

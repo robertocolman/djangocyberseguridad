@@ -1,27 +1,42 @@
 {% extends "base.html" %}
 {% load static %}
 {% block contenido %}
-    <section>
+<section>
+    <div class="container">
+
         {% if user.is_authenticated %}
             <a href="{% url 'apps.blog:crear_post' %}">Crear Nuevo Artículo</a>
         {% endif %}
-        
-        {% for post in posts %}
-            <article>
-                <h3><a href="{% url 'apps.blog:postdetalle' post.pk %}">{{ post.titulo }}</a></h3>
-                <p>Fecha publicación: {{ post.fecha_publicacion }}</p>
-                <p>Autor: {{ post.autor }}</p>
-                <p>{{ post.resumen }}</p>
-                
-                {% if user.is_authenticated %}
-                    {% if user.perfil.rol == 'colaborador' or user == post.autor %}
-                        <a href="{% url 'blog:editar_post' post.pk %}" class="btn btn-warning">Editar</a>
-                        <a href="{% url 'blog:eliminar_post' post.pk %}" class="btn btn-danger">Eliminar</a>
-                    {% endif %}
-                {% endif %}
-            </article>
-        {% empty %}
-            <p>No hay artículos disponibles.</p>
-        {% endfor %}
-    </section>
+
+        <h1>Artículos</h1>
+
+        <!-- Mostrar todas las categorías -->
+        <h3>Estas son las categorías:</h3>
+        <div class="row" style="gap: 15px;"> <!--se supone mostrará uno al lado de otro, con un espacio de 15px-->
+            <ul>
+                {% for categoria in categorias %}
+                    <li>
+                        <a href="{% url 'apps.blog:categoria_posts' categoria.id %}">{{ categoria.nombre }}</a>
+                    </li>   
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Mostrar los posts -->
+        <h3>Posts en la categoría: {{ categoria.nombre }}</h3>
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-md-4">
+                    <div class="post">
+                        <h4><a href="{% url 'blog:postdetalle' post.id %}">{{ post.titulo }}</a></h4>
+                        <p>{{ post.contenido|truncatewords:20 }}</p>
+                        <p><small>Publicado el {{ post.fecha_publicacion }}</small></p>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay posts disponibles en esta categoría.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-
+ 
 # Create your models here.
 class Post(models.Model):
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -31,12 +31,12 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
-
+ 
 class Comentario(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     autor_comentario = models.ForeignKey(User, on_delete=models.CASCADE)
     cuerpo_comentario = models.TextField()
-    creado = models.DateTimeField(auto_now_add=True)
+    creado = models.DateTimeField(auto_now_add=True) #¿por qué? 
     aprobado = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(default=timezone.now)  # Fecha de creación del comentario
 

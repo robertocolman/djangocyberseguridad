@@ -16,12 +16,12 @@
             <p>{{ post.contenido }}</p>
         </div>
 
-        <!-- Mostrar comentarios -->
+        <!-- Mostrar comentarios--> 
         <h3>Comentarios</h3>
         {% for comentario in comentarios %}
             <div class="comentario">
                 <strong>{{ comentario.autor_comentario.username }}</strong> 
-                <span>{{ comentario.creado|timesince }} ago</span>
+                <span>{{ comentario.fecha_creacion|timesince }}</span>
                 <p>{{ comentario.cuerpo_comentario }}</p>
             </div>
         {% empty %}
