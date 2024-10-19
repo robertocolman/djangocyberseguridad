@@ -9,4 +9,5 @@ class PostForm(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título'}),
             'contenido': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Contenido', 'rows': 5}),
             'categoria': forms.Select(attrs={'class': 'form-control'}),
+            'categorias': forms.CheckboxSelectMultiple(), 
         }

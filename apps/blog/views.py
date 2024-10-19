@@ -9,6 +9,8 @@ from apps.blog_auth.forms import PostForm
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.blog_auth.forms import ComentarioForm
 from django.views.generic import DetailView
+from .forms import CrearPostForm
+from django.views import View
 
 
 # Create your views here.
@@ -164,7 +166,7 @@ def categoria_posts(request, categoria_id):
         'posts': posts,
         'categorias': categorias,  # Agregar las categorías al contexto
     }
-    return render(request, 'posts.html', context)
+    return render(request, 'blog/posts.html', context)
 
 def posts(request):
     posts = Post.objects.all()  # Obtener todos los posts
@@ -199,3 +201,18 @@ def borrar_comentario(request, comentario_id):
             comentario.delete()
             return redirect('apps.blog:post_detalle', pk=post_id)  # Redirige al detalle del post
     return redirect('apps.blog:post_detalle', pk=post_id)
+
+class CrearPostView(View):
+    def get(self, request):
+        form = CrearPostForm()
+        return render(request, 'blog/crear_post.html', {'form': form})
+
+    def post(self, request):
+        form = CrearPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.autor = request.user  # Asigna el autor del post
+            post.save()  # Guarda el post primero para que se pueda asociar con las categorías
+            form.save_m2m()  # Guarda las relaciones de categorías (ManyToMany)
+            return redirect('apps.blog:posts')  # Redirige después de crear el post
+        return render(request, 'blog/crear_post.html', {'form': form})
