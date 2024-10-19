@@ -35,3 +35,5 @@ urlpatterns = [
     #path('blog/', include('blog.urls')),
     #path('auth/', include('auth.urls'))
 ] 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
