@@ -6,6 +6,9 @@
 
         {% if user.is_authenticated %}
             <a href="{% url 'apps.blog:crear_post' %}">Crear Nuevo Artículo</a>
+
+            {%else%}
+            <a href="{% url 'apps.blog_auth:registro' %}">Registrate para crear un posts</a>
         {% endif %}
 
         <h1>Artículos</h1>
@@ -32,6 +35,13 @@
                         <p>{{ post.contenido|truncatewords:20 }}</p>
                         <p><small>Publicado el {{ post.fecha_publicacion }}</small></p>
                     </div>
+                    {% if user.is_authenticated %}
+                            {% if user in post.favoritos.all %}
+                                <a href="{% url 'apps.blog:desmarcar_favorito' post.pk %}" class="btn btn-warning">Quitar de favoritos</a>
+                            {% else %}
+                                <a href="{% url 'apps.blog:marcar_favorito' post.pk %}" class="btn btn-primary">Agregar a favoritos</a>
+                            {% endif %}
+                        {% endif %}
                 </div>
             {% empty %}
                 <p>No hay posts disponibles en esta categoría.</p>

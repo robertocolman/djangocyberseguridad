@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import Post, Comentario, Categoria
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from apps.blog_auth.forms import PostForm
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.blog_auth.forms import ComentarioForm
@@ -175,3 +175,27 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detalles.html'  # Asegúrate de que esta plantilla exista
     context_object_name = 'post'
+
+@login_required
+def toggle_favorite(request, post_id):
+    post = Post.objects.get(id=post_id)
+    
+    if request.user.perfil.favoritos.filter(id=post_id).exists():
+        # Si ya es favorito, lo removemos
+        request.user.perfil.favoritos.remove(post)
+        is_favorite = False
+    else:
+        # Si no es favorito, lo agregamos
+        request.user.perfil.favoritos.add(post)
+        is_favorite = True
+
+    return JsonResponse({'is_favorite': is_favorite})
+
+def borrar_comentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+    post_id = comentario.post.id  # Obtén el ID del post al que pertenece el comentario
+    if request.method == 'POST':
+        if request.user == comentario.autor_comentario:
+            comentario.delete()
+            return redirect('apps.blog:post_detalle', pk=post_id)  # Redirige al detalle del post
+    return redirect('apps.blog:post_detalle', pk=post_id)
