@@ -32,18 +32,6 @@ class CustomLoginView(LoginView):
     success_url = reverse_lazy('index')
 
 
-'''def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("apps.blog_auth:login")
-        else:
-            messages.error(request, "Credenciales incorrectas")
-    return render(render, "auth/login.html")'''
-
 class LogoutView(LoginRequiredMixin, auth_views.LogoutView):
     template_name = "auth/logout.html"
     next_page = reverse_lazy('blog:index')
