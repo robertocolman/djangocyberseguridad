@@ -5,10 +5,8 @@ from .models import Perfil
 
 @receiver(post_save, sender=User)
 def crear_perfil(sender, instance, created, **kwargs):
-    if created and not hasattr(instance, 'perfil'):
+    if created:  # Solo crea el perfil si el usuario es nuevo
         Perfil.objects.create(user=instance)
-    else:
-        pass
 
 @receiver(post_save, sender=User)
 def guardar_perfil(sender, instance, **kwargs):
@@ -26,10 +24,15 @@ def crear_perfil(sender, instance, created, **kwargs):
         Perfil.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
-def guardar_perfil(sender, instance, created, **kwargs):
-    if created:  # Solo crea un perfil si el usuario es nuevo
-        Perfil.objects.create(user=instance)
-    else:
-        # Aquí podrías actualizar el perfil si es necesario
-        perfil = instance.perfil  # Acceder al perfil asociado al usuario
-        perfil.save()  # Guardar cualquier cambio si es necesario
+def guardar_perfil(sender, instance, **kwargs):
+    if hasattr(instance, 'perfil'):  # Asegúrate de que el perfil exista antes de guardarlo
+        instance.perfil.save()
+
+# @receiver(post_save, sender=User)
+# def guardar_perfil(sender, instance, created, **kwargs):
+#     if created:  # Solo crea un perfil si el usuario es nuevo
+#         Perfil.objects.create(user=instance)
+#     else:
+#         # Aquí podrías actualizar el perfil si es necesario
+#         perfil = instance.perfil  # Acceder al perfil asociado al usuario
+#         perfil.save()  # Guardar cualquier cambio si es necesario

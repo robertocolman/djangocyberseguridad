@@ -2,8 +2,8 @@ from django.urls import path
 from django.views.generic import TemplateView
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import SignUpView, LoginView, LogoutView 
-from .views import *
+from .views import SignUpView, LoginView, LogoutView, CustomLoginView
+from myblog.views import index
 
 app_name = 'apps.blog_auth'
 
